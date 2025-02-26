@@ -1,16 +1,18 @@
 // Here are the project parameters
 import express from 'express';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv'
 import cors from 'cors';
 import { calculateScore } from './Jobs/calculateScore.js';
-import {  fetchUserData } from './Jobs/fetchUserData.js';
+import { fetchUserData } from './Jobs/fetchUserData.js';
 
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/cookieClicker', {
+mongoose.connect(process.env.MONGODB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log('MongoDB connected'))
@@ -24,11 +26,11 @@ app.get('/api/user', (req, res) => {
 });
 
 // Handle Click Event
-app.post('/api/click', (req, res) => {  
+app.post('/api/click', (req, res) => {
   calculateScore()
     .then(result => res.json(result))
     .catch(err => res.status(500).json({ error: err.message }));
 });
 
 // Start Server
-app.listen(5000, () => console.log('Server running on port 5000'));
+app.listen(process.env.PORT || 5000, () => console.log('Server running on port 5000'));
