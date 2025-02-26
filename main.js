@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGODB, {
 // Get User Data
 app.get('/api/user', (req, res) => {
   fetchUserData()
-    .then(data => res.json(data))
+    .then(data => res.json({ data: data, message: "Everything is OK" }))
     .catch(err => res.status(500).json({ error: err.message }));
 });
 
